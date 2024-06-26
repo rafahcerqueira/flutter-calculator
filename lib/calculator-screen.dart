@@ -11,9 +11,9 @@ class _CalculatorState extends State<Calculator> {
   String result = "0";
 
   List<String> buttons = [
+    ' ',
     'AC',
-    '(',
-    ')',
+    ' ',
     '÷',
     '7',
     '8',
@@ -130,8 +130,8 @@ class _CalculatorState extends State<Calculator> {
         buttonText == '-' ||
         buttonText == '+' ||
         buttonText == 'DEL' ||
-        buttonText == ')' ||
-        buttonText == '(') {
+        buttonText == ' ' ||
+        buttonText == ' ') {
       return Color(0xFFFF2F2F);
     }
     return Colors.white;
