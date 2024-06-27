@@ -11,9 +11,9 @@ class _CalculatorState extends State<Calculator> {
   String result = "0";
 
   List<String> buttons = [
-    ' ',
     'AC',
-    ' ',
+    '⌫',
+    '%',
     '÷',
     '7',
     '8',
@@ -27,7 +27,6 @@ class _CalculatorState extends State<Calculator> {
     '2',
     '3',
     '-',
-    'DEL',
     '0',
     '.',
     '=',
@@ -59,7 +58,7 @@ class _CalculatorState extends State<Calculator> {
                 child: Text(
                   result,
                   style: TextStyle(
-                    fontSize: 48,
+                    fontSize: 32,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -70,7 +69,7 @@ class _CalculatorState extends State<Calculator> {
           Divider(color: const Color(0xFF1d2630)),
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(15),
               child: GridView.builder(
                 itemCount: buttons.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -129,9 +128,8 @@ class _CalculatorState extends State<Calculator> {
         buttonText == 'x' ||
         buttonText == '-' ||
         buttonText == '+' ||
-        buttonText == 'DEL' ||
-        buttonText == ' ' ||
-        buttonText == ' ') {
+        buttonText == '⌫' ||
+        buttonText == '%') {
       return Color(0xFFFF2F2F);
     }
     return Colors.white;
@@ -150,7 +148,7 @@ class _CalculatorState extends State<Calculator> {
     if (buttonText == 'AC') {
       input = "";
       result = "0";
-    } else if (buttonText == 'DEL') {
+    } else if (buttonText == '⌫') {
       if (input.isNotEmpty)
         // Verifica se a string não está vazia
         input = input.substring(0, input.length - 1);
@@ -163,6 +161,7 @@ class _CalculatorState extends State<Calculator> {
         Expression exp = p.parse(input);
         result =
             '${exp.evaluate(EvaluationType.REAL, ContextModel())}'.toString();
+        input = result;
       } catch (e) {
         result = "Error";
       }
