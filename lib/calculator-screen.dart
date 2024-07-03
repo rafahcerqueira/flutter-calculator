@@ -149,9 +149,7 @@ class _CalculatorState extends State<Calculator> {
       input = "";
       result = "0";
     } else if (buttonText == '⌫') {
-      if (input.isNotEmpty)
-        // Verifica se a string não está vazia
-        input = input.substring(0, input.length - 1);
+      if (input.isNotEmpty) input = input.substring(0, input.length - 1);
     } else if (buttonText == '=') {
       input = input.replaceAll('x', '*');
       input = input.replaceAll('÷', '/');
@@ -161,21 +159,54 @@ class _CalculatorState extends State<Calculator> {
         Expression exp = p.parse(input);
         result =
             '${exp.evaluate(EvaluationType.REAL, ContextModel())}'.toString();
-        input = result;
       } catch (e) {
         result = "Error";
       }
 
       if (result == "Infinity") result = "Error";
 
-      if (input.endsWith(".0")) input = input.replaceAll(".0", "");
-
       if (result.endsWith(".0")) {
         result = result.replaceAll(".0", "");
-        return;
+      }
+
+      input = ""; // Limpar o input
+    } else if (buttonText == '%') {
+      if (input.isNotEmpty) {
+        try {
+          Parser p = Parser();
+          Expression exp = p.parse(input);
+          double eval = exp.evaluate(EvaluationType.REAL, ContextModel());
+          result = (eval / 100).toString();
+          input = result;
+        } catch (e) {
+          result = "Error";
+        }
+
+        if (result.endsWith(".0")) {
+          result = result.replaceAll(".0", "");
+        }
+
+        input = "";
       }
     } else {
-      input += buttonText;
+      // Prevenir múltiplos operadores consecutivos
+      if (isOperator(buttonText) &&
+          input.isNotEmpty &&
+          isOperator(input[input.length - 1])) {
+        input = input.substring(0, input.length - 1) + buttonText;
+      } else if (input.length < 15) {
+        // Limite de caracteres
+        input += buttonText;
+      }
     }
+    setState(() {});
+  }
+
+  bool isOperator(String buttonText) {
+    return buttonText == '÷' ||
+        buttonText == 'x' ||
+        buttonText == '-' ||
+        buttonText == '+' ||
+        buttonText == '%';
   }
 }
